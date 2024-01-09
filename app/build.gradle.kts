@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.example.yummii_v10"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.example.yummii_v10"

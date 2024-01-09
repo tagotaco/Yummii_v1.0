@@ -17,7 +17,7 @@ fun Shopping(title: String) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFFFF5ED)),
+            .background(Color(0xFF7D5260)),
         contentAlignment = Alignment.Center
     ) {
         Text(

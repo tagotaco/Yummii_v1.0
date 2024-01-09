@@ -11,7 +11,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
-
 @Composable
 fun FavoriteUI(title: String) {
     Box(
@@ -31,7 +30,7 @@ fun FavoriteUI(title: String) {
 
 @Composable
 @Preview
-fun FavoriteScreenPreview(){
+fun FavoriteUIScreenPreview(){
 
     FavoriteUI("Favorite")
 }

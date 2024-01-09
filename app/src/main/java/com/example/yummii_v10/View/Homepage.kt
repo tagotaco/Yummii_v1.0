@@ -33,5 +33,5 @@ fun Homepage(title: String) {
 @Preview
 fun HomepagePreview(){
 
-   Homepage("Favorite")
+   Homepage("Home")
 }
