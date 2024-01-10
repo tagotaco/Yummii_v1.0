@@ -16,11 +16,25 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.yummii_v10.View.component.RecipeCard
 
+//TODO: Fix query parameters
+//TODO: Connect to Api
+
 @Composable
 fun Recipe(
     title: String,
-    navController: NavHostController
+    navController: NavHostController,
+    query: String?
 ) {
+    // Check if query is null or empty to decide on random recipes
+    /*al shouldShowRandomRecipes = query.isNullOrEmpty()
+    val recipes = if (shouldShowRandomRecipes) {
+        // Generate or fetch random recipes
+    } else {
+        // Fetch recipes based on the query
+    }*/
+
+
+    // Test Recipe card
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -33,6 +47,7 @@ fun Recipe(
             }
         }
     }
+    // End test recipe card
 }
 
 @Composable
@@ -41,6 +56,7 @@ fun RecipeScreenPreview() {
     val navController = rememberNavController()
     Recipe(
         title = "Recipe",
-        navController = navController
+        navController = navController,
+        query = null
     )
 }

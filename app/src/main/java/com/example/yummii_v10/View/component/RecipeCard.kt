@@ -146,6 +146,6 @@ fun RecipeCardPreview() {
         ingredients = "",
         instructions = "",
     )
-    RecipeCard(recipe = recipeData, navController)*/
+    */
     RecipeCard(navController = navController, id = 1)
 }
