@@ -7,24 +7,35 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import com.example.yummii_v10.ViewModel.RecipeViewModel
 
 @Composable
-fun BottomNav (currentRoute: String, navController: NavHostController) {
-
+fun BottomNav(
+    currentRoute: String,
+    navController: NavHostController,
+    recipeViewModel: RecipeViewModel // Pass RecipeViewModel as a parameter
+) {
     val contentColor = Color(0xFF372524)
     val inactiveColor = Color(0xFF9E9E9E)
+    val activeColor = Color(0xFFEFB8C8)
 
-    NavigationBar(
-        containerColor = Color(0xFFD86721),
-        contentColor = Color(0xFF372524)
-    ) {
+    NavigationBar(containerColor = Color(0xFFD86721), contentColor = contentColor) {
         Screen.values().forEach { screen ->
             NavigationBarItem(
-                icon = { Icon(screen.icon, contentDescription = screen.name, tint = contentColor) },
+                icon = {
+                        Icon(screen.icon, contentDescription = screen.name,
+                        tint = contentColor)
+                       },
                 label = { Text(screen.name, color = contentColor) },
                 selected = currentRoute == screen.route,
                 onClick = {
-                    navController.navigate(screen.route)
+                    // Check if the screen is Recipe, if so, reset the query
+                    if (screen == Screen.Recipe) {
+                        recipeViewModel.query = null
+                    }
+                    navController.navigate(screen.route) {
+                        //TODO: Add options if needed, e.g., popUpTo, launchSingleTop
+                    }
                 },
                 colors = NavigationBarItemDefaults.colors(
                     selectedIconColor = contentColor,

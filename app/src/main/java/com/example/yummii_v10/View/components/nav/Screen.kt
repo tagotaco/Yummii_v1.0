@@ -8,7 +8,7 @@ import androidx.compose.material.icons.outlined.List
 import androidx.compose.ui.graphics.vector.ImageVector
 
 enum class Screen (val route: String, val icon: ImageVector) {
-    HomePage("homepage", Icons.Default.Home),
+    Home("homepage", Icons.Default.Home),
     Recipe("recipe", Icons.Outlined.List),
     Favorite("favorite", Icons.Default.Favorite),
     Shopping("shopping", Icons.Default.ShoppingCart)

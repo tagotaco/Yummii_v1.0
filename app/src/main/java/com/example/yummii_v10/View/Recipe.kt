@@ -1,53 +1,92 @@
 package com.example.yummii_v10.View
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.yummii_v10.View.component.RecipeCard
+import com.example.yummii_v10.ViewModel.RecipeViewModel
 
-//TODO: Fix query parameters
-//TODO: Connect to Api
 
 @Composable
 fun Recipe(
     title: String,
+    recipeViewModel: RecipeViewModel = viewModel(),
     navController: NavHostController,
     query: String?
 ) {
-    // Check if query is null or empty to decide on random recipes
-    /*al shouldShowRandomRecipes = query.isNullOrEmpty()
-    val recipes = if (shouldShowRandomRecipes) {
-        // Generate or fetch random recipes
-    } else {
-        // Fetch recipes based on the query
-    }*/
 
+    LaunchedEffect(key1 = Unit) {
+        Log.d("RecipeScreen", "LaunchedEffect triggered")
+        recipeViewModel.getRandomRecipe()
+    }
 
-    // Test Recipe card
-    Box(
+    // Observe the query from the ViewModel
+    val query = recipeViewModel.query
+
+    // Observe LiveData from the ViewModel
+    val recipes by recipeViewModel.randomRecipesLiveData.observeAsState(initial = emptyList())
+
+    // Keep the last stage of the page
+    val listState = rememberLazyListState()
+
+    Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFFFF5ED)),
-        contentAlignment = Alignment.Center
-    ) {
-        LazyColumn {
-            items(10) { index -> // Renamed 'id' to 'index' to avoid any conflict
-                RecipeCard(id = index + 1, navController = navController)
+            .background(Color(0xFFFFF5ED))
+            .padding(15.dp)
+    ){
+        Text(
+            text = if (!query.isNullOrBlank()) "Search result for \"$query\"" else "Recipes",
+            style = MaterialTheme.typography.headlineLarge,
+            color = Color(0xFFFCAB64)
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+
+        //Text description
+        Text(
+            text = if (!query.isNullOrBlank())
+                "These recipes are the search results for \"$query\""
+            else
+                "Here are our recommendations for your delicious recipes. Try some of them or you can search for a recipe after your preferences.",
+            style = MaterialTheme.typography.bodyLarge,
+            color = Color(0xFFAB5C1F)
+        )
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+
+        LazyColumn(state = listState) {
+            items(items = recipes) { recipe ->
+                // Assuming RecipeCard takes a VisualizationResponse object, not an Int
+                RecipeCard(recipe = recipe, navController = navController, recipe.id)
             }
         }
+
     }
-    // End test recipe card
 }
 
 @Composable

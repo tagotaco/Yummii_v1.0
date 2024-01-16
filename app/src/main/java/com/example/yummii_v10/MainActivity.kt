@@ -28,6 +28,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.yummii_v10.Model.api.api.recipeDetail.RecipeInfoViewModelInterface
 import com.example.yummii_v10.View.FavoriteUI
 import com.example.yummii_v10.View.Homepage
 import com.example.yummii_v10.View.Recipe
@@ -35,6 +36,7 @@ import com.example.yummii_v10.View.RecipeDetail
 import com.example.yummii_v10.View.Shopping
 import com.example.yummii_v10.View.components.nav.BottomNav
 import com.example.yummii_v10.View.components.nav.Screen
+import com.example.yummii_v10.ViewModel.RecipeViewModel
 import com.example.yummii_v10.ui.theme.Typography
 import com.example.yummii_v10.ui.theme.Yummii_v10Theme
 
@@ -61,30 +63,36 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun BottomNavUI() {
     val navController = rememberNavController()
-
+    val recipeViewModel: RecipeViewModel = viewModel()
     Scaffold(
         bottomBar = {
             // Pass only the current route and navController to BottomNav
-            BottomNav(navController.currentBackStackEntry?.destination?.route ?: "", navController)
+            BottomNav(navController.currentBackStackEntry?.destination?.route ?: "",
+                navController = navController,
+                recipeViewModel = recipeViewModel)
         }
     ) { innerPadding ->
         NavHost(
-            navController, startDestination = Screen.HomePage.route,
+            navController, startDestination = Screen.Home.route,
             Modifier.padding(innerPadding)
         ) {
             composable("homepage") { Homepage("Home") }
 
-            //TODO: Fix recipe cannot take query parameters
-            composable("recipe"){Recipe("Recipe", navController, null)}
-
+            composable("recipe") {
+                val recipeViewModel: RecipeViewModel = viewModel()
+                Recipe("Recipe", recipeViewModel, navController, null)
+            }
+            //TODO: Fix Recipe page to take query parameters.
+            //TODO: Fix the page is reset when away and get back.
             /*composable("recipe/{query}") { backStackEntry ->
                 val query = backStackEntry.arguments?.getString("query") ?: ""
                 Recipe("Recipe", navController, null)
             }*/
-
+            //TODO: RecipeDetail cannot link from selected id.
             composable("RecipeDetail/{id}") { backStackEntry ->
                 val id = backStackEntry.arguments?.getString("id")
-                RecipeDetail("Detail", id, navController)
+                val recipeInfoViewModel: RecipeInfoViewModelInterface = viewModel()
+                RecipeDetail("Detail", id, recipeInfoViewModel, navController)
             }
 
             composable("favorite") { FavoriteUI("favorite") }

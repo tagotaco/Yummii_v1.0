@@ -29,6 +29,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
+import com.example.yummii_v10.Model.api.api.VisualizationResponse
 import com.example.yummii_v10.R
 
 
@@ -36,11 +37,10 @@ import com.example.yummii_v10.R
 @OptIn(ExperimentalCoilApi::class)
 @Composable
 fun RecipeCard(
-    //recipe: VisualizationResponse,
+    recipe: VisualizationResponse,
     navController: NavHostController,
     id: Int,
 ) {
-
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -54,70 +54,58 @@ fun RecipeCard(
                 .background(Color.White)
                 .padding(5.dp)
         ) {
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(start = 8.dp)
-            ) {
-                Text(text = "Recipe: $id")
-                Button(onClick = { navController.navigate("RecipeDetail/$id") }) {
-                    Text("More..", color = Color.White)
+
+                val imageUrl = recipe.image
+
+                Image(
+                    painter = rememberImagePainter(
+                        data = imageUrl,
+                        builder = {
+                          listener(onError = { _, throwable ->
+                                Log.e("RecipeCard", "Error loading image: $throwable")
+                            })
+                            placeholder(R.drawable.error_image)
+                            error(R.drawable.error_image)
+                        }
+                    )
+                    ,
+                    contentDescription = "Recipe Image",
+                    modifier = Modifier
+                        .size(120.dp)
+                        .padding(8.dp),
+                    contentScale = ContentScale.Crop
+                )
+
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(start = 8.dp)
+                ) {
+                    Text(
+                        text = recipe.title,
+                        style = MaterialTheme.typography.bodyLarge,
+                        fontWeight = FontWeight.SemiBold,
+                        color = Color(0xFFFF4F00)
+                    )
+
+                    IconAndText(text = "Servings: " + recipe.servings)
+                    IconAndText(text = "Duration: " + recipe.readyInMinutes + " minutes")
+                    IconAndText(text = "Author: " + recipe.author)
+                    Button(
+                        onClick = {
+                             navController.navigate("RecipeDetail/${recipe.id}")
+                        },
+                        modifier = Modifier
+                            .align(Alignment.End)
+                            .padding(top = 5.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color(0xFFD86721)
+                        )
+                    ) {
+                        Text("More..", color = Color.White)
+                    }
                 }
             }
-            /*val imageUrl = recipe.image
-
-            Image(
-                painter = rememberImagePainter(
-                    data = imageUrl,
-                    builder = {
-                        listener(onError = { _, throwable ->
-                            Log.e("RecipeCard", "Error loading image: $throwable")
-                        })
-                        placeholder(R.drawable.error_image)
-                        error(R.drawable.error_image)
-                    }
-                )
-                ,
-                contentDescription = "Recipe Image",
-                modifier = Modifier
-                    .size(120.dp)
-                    .padding(8.dp),
-                contentScale = ContentScale.Crop
-            )
-
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(start = 8.dp)
-            ) {
-                Text(
-                    text = recipe.title,
-                    style = MaterialTheme.typography.bodyLarge,
-                    fontWeight = FontWeight.SemiBold,
-                    color = Color(0xFFFF4F00)
-                )
-
-                IconAndText(text = "Servings: " + recipe.servings)
-                IconAndText(text = "Duration: " + recipe.readyInMinutes + " minutes")
-                IconAndText(text = "Author: " + recipe.author)
-                Button(
-                    onClick = {
-                        Log.d("Navigation", "Navigating to RecipeDetails/${recipe.id}")
-                        navController.navigate("RecipeDetails/${recipe.id}")
-                        //navController.navigate("RecipeDetails/${recipe.id}")
-                    },
-                    modifier = Modifier
-                        .align(Alignment.End)
-                        .padding(top = 5.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFFD86721)
-                    )
-                ) {
-                    Text("More..", color = Color.White)
-                }
-            }*/
-        }
-
     }
 }
 
@@ -125,27 +113,29 @@ fun RecipeCard(
 fun IconAndText(text: String) {
     Row(
         verticalAlignment = Alignment.CenterVertically
-    ) {
-        Spacer(modifier = Modifier.width(4.dp))
-        Text(text, style = MaterialTheme.typography.bodyMedium)
-    }
+        ) {
+            Spacer(modifier = Modifier.width(4.dp))
+            Text(text, style = MaterialTheme.typography.bodyMedium)
+        }
 }
 
 @Composable
 @Preview
 fun RecipeCardPreview() {
     val navController = rememberNavController()
+
     //Mock data
-    /*val recipeData = VisualizationResponse(
-        id = 1,
-        title = "Mock Recipe Title",
-        image = "https://via.placeholder.com/150",
-        servings = 4,
-        readyInMinutes = 30,
-        author = "John Doe",
-        ingredients = "",
-        instructions = "",
+    val recipeData = VisualizationResponse(
+    id = 1,
+    title = "Mock Recipe Title",
+    image = "https://via.placeholder.com/150",
+    servings = 4,
+    readyInMinutes = 30,
+    author = "John Doe",
+    ingredients = "",
+    instructions = "",
     )
-    */
-    RecipeCard(navController = navController, id = 1)
+
+RecipeCard(navController = navController,recipe = recipeData, id = 1)
+
 }
