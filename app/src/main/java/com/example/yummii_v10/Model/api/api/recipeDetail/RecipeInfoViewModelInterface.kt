@@ -7,3 +7,5 @@ interface RecipeInfoViewModelInterface {
     val recipe: LiveData<Recipe>
     fun fetchRecipeInformation(recipeId: Int)
 }
+
+

@@ -80,5 +80,7 @@ dependencies {
     implementation ("com.google.accompanist:accompanist-coil:0.15.0")
     implementation ("io.coil-kt:coil-compose:1.4.0")
 
+    //Icons extension
+    implementation("androidx.compose.material:material-icons-extended:1.5.4")
 
 }

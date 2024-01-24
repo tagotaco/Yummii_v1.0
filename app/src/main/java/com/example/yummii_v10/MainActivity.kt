@@ -3,32 +3,22 @@ package com.example.yummii_v10
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.BottomAppBar
-import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.MaterialTheme.typography
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material3.Typography
-import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.yummii_v10.Model.api.api.RetrofitClient
+import com.example.yummii_v10.Model.api.api.recipeDetail.RecipeInfoViewModelFactory
 import com.example.yummii_v10.Model.api.api.recipeDetail.RecipeInfoViewModelInterface
+import com.example.yummii_v10.Model.api.api.recipeDetail.RecipeRepository
 import com.example.yummii_v10.View.FavoriteUI
 import com.example.yummii_v10.View.Homepage
 import com.example.yummii_v10.View.Recipe
@@ -37,7 +27,6 @@ import com.example.yummii_v10.View.Shopping
 import com.example.yummii_v10.View.components.nav.BottomNav
 import com.example.yummii_v10.View.components.nav.Screen
 import com.example.yummii_v10.ViewModel.RecipeViewModel
-import com.example.yummii_v10.ui.theme.Typography
 import com.example.yummii_v10.ui.theme.Yummii_v10Theme
 
 class MainActivity : ComponentActivity() {
@@ -66,7 +55,7 @@ fun BottomNavUI() {
     val recipeViewModel: RecipeViewModel = viewModel()
     Scaffold(
         bottomBar = {
-            // Pass only the current route and navController to BottomNav
+
             BottomNav(navController.currentBackStackEntry?.destination?.route ?: "",
                 navController = navController,
                 recipeViewModel = recipeViewModel)
@@ -88,11 +77,14 @@ fun BottomNavUI() {
                 val query = backStackEntry.arguments?.getString("query") ?: ""
                 Recipe("Recipe", navController, null)
             }*/
-            //TODO: RecipeDetail cannot link from selected id.
+
             composable("RecipeDetail/{id}") { backStackEntry ->
-                val id = backStackEntry.arguments?.getString("id")
-                val recipeInfoViewModel: RecipeInfoViewModelInterface = viewModel()
-                RecipeDetail("Detail", id, recipeInfoViewModel, navController)
+                val id = backStackEntry.arguments?.getString("id") ?: ""
+                val spoonacularService = RetrofitClient.service
+                val repository = RecipeRepository(spoonacularService)
+                val recipeInfoViewModel: RecipeInfoViewModelInterface = viewModel(factory = RecipeInfoViewModelFactory(repository))
+
+                RecipeDetail(id, recipeInfoViewModel, navController)
             }
 
             composable("favorite") { FavoriteUI("favorite") }

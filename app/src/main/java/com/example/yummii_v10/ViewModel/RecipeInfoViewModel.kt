@@ -1,5 +1,6 @@
 package com.example.yummii_v10.ViewModel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -17,12 +18,15 @@ class RecipeInfoViewModel(private val repository: RecipeRepository) : ViewModel(
     override fun fetchRecipeInformation(recipeId: Int) {
         viewModelScope.launch {
             try {
-                val result = repository.getRecipeInformation(recipeId)
+                val apiKey = "d1d0b9b53205452090604f02ea3ebeb2"
+                val result = repository.getRecipeInformation(recipeId, apiKey)
                 _recipe.value = result
             } catch (e: Exception) {
                 // Handle the exception
+                Log.e("RecipeInfoViewModel", "Error fetching recipe information: ${e.message}")
             }
         }
     }
 }
+
 

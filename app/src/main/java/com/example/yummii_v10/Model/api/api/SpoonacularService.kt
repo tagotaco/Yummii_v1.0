@@ -26,6 +26,9 @@ interface SpoonacularService {
     ): Call<RandomRecipeResponse> // Define RandomRecipeResponse based on the expected response
 
     @GET("recipes/{id}/information")
-    suspend fun getRecipeInformation(@Path("id") recipeId: Int): Recipe
+    suspend fun getRecipeInformation(
+        @Path("id") recipeId: Int,
+        @Query("apiKey") apiKey: String
+    ): Recipe
 
 }
