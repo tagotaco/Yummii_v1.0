@@ -11,27 +11,32 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.example.yummii_v10.View.component.SliderView
 
 @Composable
-fun Homepage(title: String) {
+fun Homepage(title: String, navController: NavController) {
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFFFFF5ED)),
         contentAlignment = Alignment.Center
     ) {
-        Text(
+        /*Text(
             text = title,
             fontSize = 36.sp,
             fontWeight = FontWeight.Bold,
             color = Color.Black
-        )
+        )*/
+
+        SliderView(navController = navController)
     }
 }
 
 @Composable
 @Preview
 fun HomepagePreview(){
-
-   Homepage("Home")
+    val navController = rememberNavController()
+   Homepage("Home", navController)
 }

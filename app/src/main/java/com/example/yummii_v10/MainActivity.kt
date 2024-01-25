@@ -65,7 +65,7 @@ fun BottomNavUI() {
             navController, startDestination = Screen.Home.route,
             Modifier.padding(innerPadding)
         ) {
-            composable("homepage") { Homepage("Home") }
+            composable("homepage") { Homepage("Home", navController) }
 
             composable("recipe") {
                 val recipeViewModel: RecipeViewModel = viewModel()

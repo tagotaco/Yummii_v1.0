@@ -13,6 +13,7 @@ data class VisualizationResponse(
     val author: String?,
     val ingredients: String,
     val instructions: String,
+    val summary: String
 )
 data class RandomRecipeResponse(
     val recipes: List<VisualizationResponse>
@@ -28,7 +29,7 @@ data class Recipe(
     val spoonacularScore: Double,
     val author: String,
     val extendedIngredients: List<Ingredient>,
-    val instructions: String
+    val instructions: String,
 )
 
 data class Ingredient(

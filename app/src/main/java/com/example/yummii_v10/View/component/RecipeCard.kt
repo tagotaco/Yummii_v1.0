@@ -134,6 +134,7 @@ fun RecipeCardPreview() {
     author = "John Doe",
     ingredients = "",
     instructions = "",
+        summary ="",
     )
 
 RecipeCard(navController = navController,recipe = recipeData, id = 1)
