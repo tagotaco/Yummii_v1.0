@@ -1,8 +1,6 @@
 package com.example.yummii_v10.View
 
-import android.util.Log
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,19 +15,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.yummii_v10.View.component.RecipeCard
 import com.example.yummii_v10.ViewModel.RecipeViewModel
-
 
 @Composable
 fun Recipe(
@@ -38,17 +32,13 @@ fun Recipe(
     navController: NavHostController,
     query: String?
 ) {
-
-    LaunchedEffect(key1 = Unit) {
-        Log.d("RecipeScreen", "LaunchedEffect triggered")
-        recipeViewModel.getRandomRecipe()
+    // Set the query in the ViewModel
+    LaunchedEffect(key1 = query) {
+        recipeViewModel.query = query
     }
 
-    // Observe the query from the ViewModel
-    val query = recipeViewModel.query
-
     // Observe LiveData from the ViewModel
-    val recipes by recipeViewModel.randomRecipesLiveData.observeAsState(initial = emptyList())
+    val recipes by recipeViewModel.recipesLiveData.observeAsState(initial = emptyList())
 
     // Keep the last stage of the page
     val listState = rememberLazyListState()
@@ -58,7 +48,7 @@ fun Recipe(
             .fillMaxSize()
             .background(Color(0xFFFFF5ED))
             .padding(15.dp)
-    ){
+    ) {
         Text(
             text = if (!query.isNullOrBlank()) "Search result for \"$query\"" else "Recipes",
             style = MaterialTheme.typography.headlineLarge,
@@ -66,7 +56,7 @@ fun Recipe(
         )
         Spacer(modifier = Modifier.height(10.dp))
 
-        //Text description
+        // Text description
         Text(
             text = if (!query.isNullOrBlank())
                 "These recipes are the search results for \"$query\""
@@ -78,14 +68,11 @@ fun Recipe(
 
         Spacer(modifier = Modifier.height(10.dp))
 
-
         LazyColumn(state = listState) {
             items(items = recipes) { recipe ->
-                // Assuming RecipeCard takes a VisualizationResponse object, not an Int
                 RecipeCard(recipe = recipe, navController = navController, recipe.id)
             }
         }
-
     }
 }
 

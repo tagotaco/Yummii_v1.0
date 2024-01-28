@@ -44,8 +44,14 @@ import kotlinx.coroutines.delay
 @Composable
 fun SliderView(recipeViewModel: RecipeViewModel = viewModel(), navController: NavController) {
 
-    val randomRecipes by recipeViewModel.randomRecipesLiveData.observeAsState(emptyList())
-    val limitedRecipes = randomRecipes.take(3)
+    val fixedRecipeIds = listOf(637923, 1747693, 1697833)
+
+    LaunchedEffect(fixedRecipeIds) {
+        recipeViewModel.fetchFixedRecipes(fixedRecipeIds)
+    }
+
+    val fixedRecipes by recipeViewModel.fixedRecipesLiveData.observeAsState(emptyList())
+    val limitedRecipes = fixedRecipes.take(3)
 
     val images = limitedRecipes.map { it.image }
     val recommendedRecipesName = limitedRecipes.map { it.title }
@@ -123,7 +129,7 @@ fun ImageSliderWithIndicator(image: List<String>, recommendedRecipesName: List<S
                             text = recommendedRecipesName.getOrNull(currentIndex.value) ?: "Recipe Not Found",
                             fontSize = 18.sp,
                             fontWeight = FontWeight.Bold,
-                            color = Color(0xFF28191B)
+                            color = Color(0xFF993300)
                         )
                         Text(
                             text = recipesUnderText.getOrNull(currentIndex.value) ?: "Additional Info Not Found",

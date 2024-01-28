@@ -30,6 +30,7 @@ data class Recipe(
     val author: String,
     val extendedIngredients: List<Ingredient>,
     val instructions: String,
+    val summary: String
 )
 
 data class Ingredient(
@@ -54,4 +55,11 @@ data class Measure(
     val amount: Double,
     val unitLong: String,
     val unitShort: String
+)
+
+data class SearchRecipeResponse(
+    val results: List<VisualizationResponse>,
+    val offset: Int,
+    val number: Int,
+    val totalResults: Int
 )

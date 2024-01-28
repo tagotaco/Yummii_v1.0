@@ -26,13 +26,17 @@ import com.example.yummii_v10.View.RecipeDetail
 import com.example.yummii_v10.View.Shopping
 import com.example.yummii_v10.View.components.nav.BottomNav
 import com.example.yummii_v10.View.components.nav.Screen
+import com.example.yummii_v10.ViewModel.RecipeInfoViewModel
 import com.example.yummii_v10.ViewModel.RecipeViewModel
 import com.example.yummii_v10.ui.theme.Yummii_v10Theme
 
 class MainActivity : ComponentActivity() {
+
+    private lateinit var recipeInfoViewModel: RecipeInfoViewModel
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
             window.statusBarColor = getColor(R.color.CocoaBrown)
             window.navigationBarColor = getColor(R.color.CocoaBrown)
@@ -67,16 +71,16 @@ fun BottomNavUI() {
         ) {
             composable("homepage") { Homepage("Home", navController) }
 
-            composable("recipe") {
-                val recipeViewModel: RecipeViewModel = viewModel()
-                Recipe("Recipe", recipeViewModel, navController, null)
-            }
+/*composable("recipe") {
+    val recipeViewModel: RecipeViewModel = viewModel()
+    Recipe("Recipe", recipeViewModel, navController, null)
+}*/
             //TODO: Fix Recipe page to take query parameters.
             //TODO: Fix the page is reset when away and get back.
-            /*composable("recipe/{query}") { backStackEntry ->
+            composable("recipe/{query}") { backStackEntry ->
                 val query = backStackEntry.arguments?.getString("query") ?: ""
-                Recipe("Recipe", navController, null)
-            }*/
+                Recipe("Recipe", recipeViewModel, navController, query)
+            }
 
             composable("RecipeDetail/{id}") { backStackEntry ->
                 val id = backStackEntry.arguments?.getString("id") ?: ""
@@ -89,8 +93,8 @@ fun BottomNavUI() {
 
             composable("favorite") { FavoriteUI("favorite") }
             composable("shopping") { Shopping("shopping") }
-        }
-    }
+            }
+}
 }
 
 

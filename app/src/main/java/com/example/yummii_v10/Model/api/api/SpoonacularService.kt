@@ -25,6 +25,17 @@ interface SpoonacularService {
         @Query("number") number: Int
     ): Call<RandomRecipeResponse> // Define RandomRecipeResponse based on the expected response
 
+    @GET("recipes/complexSearch")
+    fun searchRecipes(
+        @Query("apiKey") apiKey: String,
+        @Query("query") query: String?,
+        @Query("cuisine") cuisine: String? = null,
+        @Query("diet") diet: String? = null,
+        @Query("intolerances") intolerances: String? = null,
+        @Query("number") number: Int,
+        @Query("offset") offset: Int
+    ): Call<SearchRecipeResponse>
+
     @GET("recipes/{id}/information")
     suspend fun getRecipeInformation(
         @Path("id") recipeId: Int,

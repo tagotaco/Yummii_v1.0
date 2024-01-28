@@ -39,7 +39,8 @@ class MockRecipeInfoViewModel : RecipeInfoViewModelInterface {
                     meta = listOf() // Added meta field
                 ),
             ),
-            instructions = "Instructions..."
+            instructions = "Instructions...",
+            summary = "Summary..."
         )
     )
 
