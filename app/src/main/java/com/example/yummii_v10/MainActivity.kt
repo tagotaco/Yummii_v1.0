@@ -71,12 +71,10 @@ fun BottomNavUI() {
         ) {
             composable("homepage") { Homepage("Home", navController) }
 
-/*composable("recipe") {
-    val recipeViewModel: RecipeViewModel = viewModel()
-    Recipe("Recipe", recipeViewModel, navController, null)
-}*/
-            //TODO: Fix Recipe page to take query parameters.
-            //TODO: Fix the page is reset when away and get back.
+            composable("recipe") {
+                Recipe("Recipe", recipeViewModel, navController, null)
+            }
+
             composable("recipe/{query}") { backStackEntry ->
                 val query = backStackEntry.arguments?.getString("query") ?: ""
                 Recipe("Recipe", recipeViewModel, navController, query)
@@ -94,8 +92,5 @@ fun BottomNavUI() {
             composable("favorite") { FavoriteUI("favorite") }
             composable("shopping") { Shopping("shopping") }
             }
+        }
 }
-}
-
-
-

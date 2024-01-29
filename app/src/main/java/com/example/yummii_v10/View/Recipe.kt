@@ -32,9 +32,16 @@ fun Recipe(
     navController: NavHostController,
     query: String?
 ) {
-    // Set the query in the ViewModel
+    // Check if query is not null and not blank then fetch based on query
+    // Else fetch random recipes
     LaunchedEffect(key1 = query) {
-        recipeViewModel.query = query
+        if (!query.isNullOrBlank()) {
+            // Fetch recipes based on the query
+            recipeViewModel.fetchRecipesBasedOnQuery(query)
+        } else {
+            // Fetch random recipes
+            recipeViewModel.fetchRandomRecipes()
+        }
     }
 
     // Observe LiveData from the ViewModel

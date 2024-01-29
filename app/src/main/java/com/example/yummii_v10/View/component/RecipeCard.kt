@@ -41,6 +41,7 @@ fun RecipeCard(
     navController: NavHostController,
     id: Int,
 ) {
+    //TODO: Fix the card cannot fetch data from API
     Card(
         modifier = Modifier
             .fillMaxWidth()

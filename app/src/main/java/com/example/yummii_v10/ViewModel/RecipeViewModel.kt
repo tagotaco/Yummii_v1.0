@@ -1,5 +1,6 @@
 package com.example.yummii_v10.ViewModel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
@@ -14,14 +15,20 @@ import com.example.yummii_v10.Model.api.api.VisualizationResponse
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
+import retrofit2.HttpException
 import retrofit2.Response
 
 class RecipeViewModel(private val state: SavedStateHandle) : ViewModel() {
 
     private val api = RetrofitClient.retrofit.create(SpoonacularService::class.java)
 
+    // LiveData for a list of recipes
     private val _recipesLiveData = MutableLiveData<List<VisualizationResponse>>(emptyList())
     val recipesLiveData: LiveData<List<VisualizationResponse>> = _recipesLiveData
+
+    // LiveData for a single recipe
+    private val _recipeLiveData = MutableLiveData<Recipe>()
+    val recipeLiveData: LiveData<Recipe> = _recipeLiveData
 
     // LiveData for fixed recipes
     private val _fixedRecipesLiveData = MutableLiveData<List<Recipe>>(emptyList())
@@ -41,14 +48,14 @@ class RecipeViewModel(private val state: SavedStateHandle) : ViewModel() {
 
     private fun fetchRecipes() {
         query?.let {
-            searchRecipes(it)
+            fetchRecipesBasedOnQuery(it)
         } ?: run {
-            getRandomRecipe()
+            fetchRandomRecipes()
         }
     }
 
 
-    private fun getRandomRecipe() {
+    fun fetchRandomRecipes() {
         val call = api.getRandomRecipe("d1d0b9b53205452090604f02ea3ebeb2", number = 50)
         call.enqueue(object : Callback<RandomRecipeResponse> {
             override fun onResponse(call: Call<RandomRecipeResponse>, response: Response<RandomRecipeResponse>) {
@@ -65,7 +72,7 @@ class RecipeViewModel(private val state: SavedStateHandle) : ViewModel() {
         })
     }
 
-    private fun searchRecipes(query: String) {
+    fun fetchRecipesBasedOnQuery(query: String) {
         val call = api.searchRecipes("d1d0b9b53205452090604f02ea3ebeb2", query = query, number = 50, offset = 0)
         call.enqueue(object : Callback<SearchRecipeResponse> {
             override fun onResponse(call: Call<SearchRecipeResponse>, response: Response<SearchRecipeResponse>) {
@@ -89,10 +96,32 @@ class RecipeViewModel(private val state: SavedStateHandle) : ViewModel() {
                 try {
                     api.getRecipeInformation(id, "d1d0b9b53205452090604f02ea3ebeb2")
                 } catch (e: Exception) {
+                    Log.e("RecipeViewModel", "Exception fetching recipe", e)
                     null
                 }
             }
-            _fixedRecipesLiveData.value = recipes
+            // Use postValue to update the LiveData from a background thread
+            _fixedRecipesLiveData.postValue(recipes)
+        }
+    }
+
+
+    fun fetchRecipeData(recipeId: Int) {
+        viewModelScope.launch {
+            try {
+                // Directly receive the result since it's a suspend function
+                val recipe = api.getRecipeInformation(recipeId, "d1d0b9b53205452090604f02ea3ebeb2")
+                Log.d("RecipeViewModel", "Recipe fetched: $recipe")
+                // Update your LiveData here
+                // Assuming you have LiveData for a single recipe
+                _recipeLiveData.value = recipe
+            } catch (e: HttpException) {
+                // Handle the case where the API response is not successful
+                Log.e("RecipeViewModel", "API Error: ${e.response()?.errorBody()?.string()}", e)
+            } catch (e: Exception) {
+                // Handle other exceptions such as network errors, etc.
+                Log.e("RecipeViewModel", "Exception fetching recipe", e)
+            }
         }
     }
 

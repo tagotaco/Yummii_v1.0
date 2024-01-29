@@ -95,7 +95,6 @@ fun Homepage(title: String, navController: NavController) {
                     }
                 }
 
-                //TODO: Fix the link to Recipe.kt with search is wrong
                 CategorySection(onCategoryClick = { category ->
                     navController.navigate("recipe/$category")
                 })
@@ -120,12 +119,18 @@ fun SearchBar(
             .height(56.dp)
             .background(Color.White, RoundedCornerShape(8.dp)),
         placeholder = { Text(text = "Search for delicious recipes", color = Color.Gray) },
-        // leadingIcon = { Icon(imageVector = Icons.Default.Menu, contentDescription = null) },
-        trailingIcon = { Icon(imageVector = Icons.Default.Search, contentDescription = null) },
+        trailingIcon = {
+            Icon(
+                imageVector = Icons.Default.Search,
+                contentDescription = "Search",
+                modifier = Modifier.clickable { onSearch() } // Add clickable modifier
+            )
+        },
         keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Search),
         keyboardActions = KeyboardActions(onSearch = { onSearch() })
     )
 }
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchWithPreferences() {
