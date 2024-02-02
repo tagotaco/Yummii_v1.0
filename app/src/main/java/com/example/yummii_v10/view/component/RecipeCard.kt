@@ -82,6 +82,7 @@ fun RecipeCard(
                         .weight(1f)
                         .padding(start = 8.dp)
                 ) {
+
                     Text(
                         text = recipe.title,
                         style = MaterialTheme.typography.bodyLarge,

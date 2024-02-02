@@ -63,3 +63,7 @@ data class SearchRecipeResponse(
     val number: Int,
     val totalResults: Int
 )
+
+data class ShoppingItem(
+    val name: String,
+    var isCrossed: Boolean)

@@ -5,7 +5,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -26,14 +25,12 @@ import com.example.yummii_v10.view.RecipeDetail
 import com.example.yummii_v10.view.Shopping
 import com.example.yummii_v10.view.components.nav.BottomNav
 import com.example.yummii_v10.view.components.nav.Screen
-import com.example.yummii_v10.ViewModel.RecipeInfoViewModel
 import com.example.yummii_v10.ViewModel.RecipeViewModel
 import com.example.yummii_v10.ui.theme.Yummii_v10Theme
 
+
 class MainActivity : ComponentActivity() {
 
-    private lateinit var recipeInfoViewModel: RecipeInfoViewModel
-    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -89,7 +86,7 @@ fun BottomNavUI() {
                 RecipeDetail(id, recipeInfoViewModel, navController)
             }
 
-            composable("favorite") { FavoriteUI("favorite") }
+            composable("favorite") { FavoriteUI("favorite", navController,recipeViewModel ) }
             composable("shopping") { Shopping("shopping") }
             }
         }

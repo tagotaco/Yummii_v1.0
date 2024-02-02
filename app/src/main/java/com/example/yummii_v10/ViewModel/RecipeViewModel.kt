@@ -34,6 +34,10 @@ class RecipeViewModel(private val state: SavedStateHandle) : ViewModel() {
     private val _fixedRecipesLiveData = MutableLiveData<List<Recipe>>(emptyList())
     val fixedRecipesLiveData: LiveData<List<Recipe>> = _fixedRecipesLiveData
 
+    private val _favoriteRecipesLiveData = MutableLiveData<List<Recipe>>(emptyList())
+    val favoriteRecipesLiveData: LiveData<List<Recipe>> = _favoriteRecipesLiveData
+
+
     private val _errorLiveData = MutableLiveData<String>()
     val errorLiveData: LiveData<String> = _errorLiveData
 
@@ -56,7 +60,7 @@ class RecipeViewModel(private val state: SavedStateHandle) : ViewModel() {
 
 
     fun fetchRandomRecipes() {
-        val call = api.getRandomRecipe("d1d0b9b53205452090604f02ea3ebeb2", number = 50)
+        val call = api.getRandomRecipe("767f89c0cd564a5592defdd854ea7701", number = 50)
         call.enqueue(object : Callback<RandomRecipeResponse> {
             override fun onResponse(call: Call<RandomRecipeResponse>, response: Response<RandomRecipeResponse>) {
                 if (response.isSuccessful && response.body() != null) {
@@ -73,7 +77,7 @@ class RecipeViewModel(private val state: SavedStateHandle) : ViewModel() {
     }
 
     fun fetchRecipesBasedOnQuery(query: String) {
-        val call = api.searchRecipes("d1d0b9b53205452090604f02ea3ebeb2", query = query, number = 50, offset = 0)
+        val call = api.searchRecipes("767f89c0cd564a5592defdd854ea7701", query = query, number = 50, offset = 0)
         call.enqueue(object : Callback<SearchRecipeResponse> {
             override fun onResponse(call: Call<SearchRecipeResponse>, response: Response<SearchRecipeResponse>) {
                 if (response.isSuccessful && response.body() != null) {
@@ -94,7 +98,7 @@ class RecipeViewModel(private val state: SavedStateHandle) : ViewModel() {
         viewModelScope.launch {
             val recipes = ids.mapNotNull { id ->
                 try {
-                    api.getRecipeInformation(id, "d1d0b9b53205452090604f02ea3ebeb2")
+                    api.getRecipeInformation(id, "767f89c0cd564a5592defdd854ea7701")
                 } catch (e: Exception) {
                     Log.e("RecipeViewModel", "Exception fetching recipe", e)
                     null
@@ -110,7 +114,7 @@ class RecipeViewModel(private val state: SavedStateHandle) : ViewModel() {
         viewModelScope.launch {
             try {
                 // Directly receive the result since it's a suspend function
-                val recipe = api.getRecipeInformation(recipeId, "d1d0b9b53205452090604f02ea3ebeb2")
+                val recipe = api.getRecipeInformation(recipeId, "767f89c0cd564a5592defdd854ea7701")
                 Log.d("RecipeViewModel", "Recipe fetched: $recipe")
                 // Update your LiveData here
                 // Assuming you have LiveData for a single recipe
@@ -124,5 +128,22 @@ class RecipeViewModel(private val state: SavedStateHandle) : ViewModel() {
             }
         }
     }
+
+    fun fetchFavoriteRecipes(ids: List<Int>) {
+        viewModelScope.launch {
+            val recipes = ids.mapNotNull { id ->
+                try {
+                    api.getRecipeInformation(id, "767f89c0cd564a5592defdd854ea7701").also {
+                        Log.d("RecipeViewModel", "Fetched favorite recipe: $it")
+                    }
+                } catch (e: Exception) {
+                    Log.e("RecipeViewModel", "Exception fetching favorite recipe", e)
+                    null
+                }
+            }
+            _favoriteRecipesLiveData.postValue(recipes)
+        }
+    }
+
 
 }

@@ -35,6 +35,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -57,14 +58,13 @@ fun Homepage(title: String, navController: NavController) {
         topBar = {
             TopAppBar(
                 title = {
-                    Text(
-                        "Yummi",
-                        color = Color(0xFFA96C36),
-                        fontSize = 30.sp,
-                        fontWeight = FontWeight.Bold,
-                        fontStyle = FontStyle.Italic,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.fillMaxWidth()
+                    Image(
+                        painter = painterResource(id = R.drawable.yummii_logo),
+                        contentDescription = "Logo",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp), // Adjust padding as needed
+                        contentScale = ContentScale.Fit // Adjust scaling as needed
                     )
                 },
                 colors = TopAppBarDefaults.smallTopAppBarColors(
