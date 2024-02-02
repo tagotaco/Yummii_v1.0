@@ -17,7 +17,7 @@ class RecipeInfoViewModel(private val repository: RecipeRepository) : ViewModel(
     override fun fetchRecipeInformation(recipeId: Int) {
         viewModelScope.launch {
             try {
-                val apiKey = "767f89c0cd564a5592defdd854ea7701"
+                val apiKey = "f79e6a6ee5704e2096edfcdfc739606a"
                 val result = repository.getRecipeInformation(recipeId, apiKey)
                 _recipe.value = result
             } catch (e: Exception) {

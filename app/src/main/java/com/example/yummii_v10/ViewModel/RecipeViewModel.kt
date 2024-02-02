@@ -60,7 +60,7 @@ class RecipeViewModel(private val state: SavedStateHandle) : ViewModel() {
 
 
     fun fetchRandomRecipes() {
-        val call = api.getRandomRecipe("767f89c0cd564a5592defdd854ea7701", number = 50)
+        val call = api.getRandomRecipe("f79e6a6ee5704e2096edfcdfc739606a", number = 50)
         call.enqueue(object : Callback<RandomRecipeResponse> {
             override fun onResponse(call: Call<RandomRecipeResponse>, response: Response<RandomRecipeResponse>) {
                 if (response.isSuccessful && response.body() != null) {
@@ -77,7 +77,7 @@ class RecipeViewModel(private val state: SavedStateHandle) : ViewModel() {
     }
 
     fun fetchRecipesBasedOnQuery(query: String) {
-        val call = api.searchRecipes("767f89c0cd564a5592defdd854ea7701", query = query, number = 50, offset = 0)
+        val call = api.searchRecipes("f79e6a6ee5704e2096edfcdfc739606a", query = query, number = 50, offset = 0)
         call.enqueue(object : Callback<SearchRecipeResponse> {
             override fun onResponse(call: Call<SearchRecipeResponse>, response: Response<SearchRecipeResponse>) {
                 if (response.isSuccessful && response.body() != null) {
@@ -98,7 +98,7 @@ class RecipeViewModel(private val state: SavedStateHandle) : ViewModel() {
         viewModelScope.launch {
             val recipes = ids.mapNotNull { id ->
                 try {
-                    api.getRecipeInformation(id, "767f89c0cd564a5592defdd854ea7701")
+                    api.getRecipeInformation(id, "f79e6a6ee5704e2096edfcdfc739606a")
                 } catch (e: Exception) {
                     Log.e("RecipeViewModel", "Exception fetching recipe", e)
                     null
@@ -114,7 +114,7 @@ class RecipeViewModel(private val state: SavedStateHandle) : ViewModel() {
         viewModelScope.launch {
             try {
                 // Directly receive the result since it's a suspend function
-                val recipe = api.getRecipeInformation(recipeId, "767f89c0cd564a5592defdd854ea7701")
+                val recipe = api.getRecipeInformation(recipeId, "f79e6a6ee5704e2096edfcdfc739606a")
                 Log.d("RecipeViewModel", "Recipe fetched: $recipe")
                 _recipeLiveData.value = recipe
 
@@ -133,7 +133,7 @@ class RecipeViewModel(private val state: SavedStateHandle) : ViewModel() {
         viewModelScope.launch {
             val recipes = ids.mapNotNull { id ->
                 try {
-                    api.getRecipeInformation(id, "767f89c0cd564a5592defdd854ea7701").also {
+                    api.getRecipeInformation(id, "f79e6a6ee5704e2096edfcdfc739606a").also {
                         Log.d("RecipeViewModel", "Fetched favorite recipe: $it")
                     }
                 } catch (e: Exception) {

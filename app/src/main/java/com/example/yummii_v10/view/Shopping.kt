@@ -100,7 +100,7 @@ fun StrikethroughText(
     strikethroughThickness: Dp,
     modifier: Modifier = Modifier
 ) {
-    // Implementation remains the same as previously defined
+
     Text(
         text = text,
         fontSize = fontSize,

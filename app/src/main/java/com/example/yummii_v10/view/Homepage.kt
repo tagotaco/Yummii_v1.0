@@ -95,6 +95,8 @@ fun Homepage(title: String, navController: NavController) {
                     }
                 }
 
+                Spacer(modifier = Modifier.padding(25.dp))
+
                 CategorySection(onCategoryClick = { category ->
                     navController.navigate("recipe/$category")
                 })
