@@ -1,4 +1,4 @@
-package com.example.yummii_v10.View.components.nav
+package com.example.yummii_v10.view.components.nav
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite

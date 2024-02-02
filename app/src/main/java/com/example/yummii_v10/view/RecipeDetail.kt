@@ -1,5 +1,6 @@
-package com.example.yummii_v10.View
+package com.example.yummii_v10.view
 
+import android.content.Context
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -20,6 +21,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircleOutline
+import androidx.compose.material.icons.filled.RemoveCircleOutline
 import androidx.compose.material.icons.outlined.ShoppingCartCheckout
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -42,6 +44,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -49,11 +52,12 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberImagePainter
+import com.example.yummii_v10.Data.sharePreference.PreferencesUtility
 import com.example.yummii_v10.Model.api.api.Ingredient
 import com.example.yummii_v10.Model.api.api.recipeDetail.MockRecipeInfoViewModel
 import com.example.yummii_v10.Model.api.api.recipeDetail.RecipeInfoViewModelInterface
 import com.example.yummii_v10.R
-import com.example.yummii_v10.View.component.BackButton
+import com.example.yummii_v10.view.component.BackButton
 import kotlin.math.roundToInt
 
 @Composable
@@ -64,7 +68,7 @@ fun RecipeDetail(
 ) {
 
     val recipe by recipeInfoViewModel.recipe.observeAsState()
-
+    val context = LocalContext.current
     // Fetch recipe information when the composable enters the composition
     LaunchedEffect(recipeId) {
         recipeId?.toIntOrNull()?.let {
@@ -92,9 +96,7 @@ fun RecipeDetail(
             }
 
             item {
-                AddToFavoritesButton(onClick = {
-                    // TODO: Add this menu into Favorite List
-                })
+                AddToFavoritesButton(recipeId = recipeId ?: "", context = context)
             }
 
             item {
@@ -195,14 +197,30 @@ fun RecipeInfoSection(readyInMinutes: Int?, servings: Int?, spoonacularScore: Do
 }
 
 @Composable
-fun AddToFavoritesButton(onClick: () -> Unit) {
+fun AddToFavoritesButton(recipeId: String, context: Context) {
+    // Initial check to see if the recipe is a favorite
+    var isFavorite by remember { mutableStateOf(false) }
+
+    // Check if the recipe is in favorites when the composable is first called
+    LaunchedEffect(key1 = recipeId) {
+        isFavorite = PreferencesUtility.getFavoriteRecipes(context).contains(recipeId)
+    }
+
     Button(
-        onClick = onClick,
+        onClick = {
+            // Toggle favorite status
+            if (isFavorite) {
+                PreferencesUtility.removeFavoriteRecipe(context, recipeId)
+            } else {
+                PreferencesUtility.saveFavoriteRecipe(context, recipeId)
+            }
+            isFavorite = !isFavorite // Update the UI based on the new favorite status
+        },
         colors = ButtonDefaults.buttonColors(
             containerColor = Color(0xFFFFF5ED),
             contentColor = Color(0xFFD86721)
         ),
-        border = BorderStroke(3.dp, Color(0xFFD86721)), // Adjust the button's border
+        border = BorderStroke(3.dp, Color(0xFFD86721)),
         elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp),
         modifier = Modifier
             .fillMaxWidth()
@@ -213,20 +231,19 @@ fun AddToFavoritesButton(onClick: () -> Unit) {
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(
-                imageVector = Icons.Filled.AddCircleOutline,
-                contentDescription = "Add to favorites",
-                modifier = Modifier.size(24.dp) // Size of the icon
+                imageVector = if (isFavorite) Icons.Filled.RemoveCircleOutline else Icons.Filled.AddCircleOutline,
+                contentDescription = if (isFavorite) "Remove from favorites" else "Add to favorites",
+                modifier = Modifier.size(24.dp)
             )
-            Spacer(Modifier.size(4.dp)) // Space between the icon and the text
+            Spacer(Modifier.size(4.dp))
             Text(
-                text = "Add to favorites",
+                text = if (isFavorite) "Remove from favorites" else "Add to favorites",
                 fontSize = 16.sp,
-                modifier = Modifier.padding(2.dp) // Padding around the text for proper spacing
+                modifier = Modifier.padding(2.dp)
             )
         }
     }
 }
-
 
 
 @Composable

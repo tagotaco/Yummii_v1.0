@@ -1,4 +1,4 @@
-package com.example.yummii_v10.View.component
+package com.example.yummii_v10.view.component
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.Image
@@ -30,14 +30,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
-import com.example.yummii_v10.R
 import com.example.yummii_v10.ViewModel.RecipeViewModel
 import kotlinx.coroutines.delay
 

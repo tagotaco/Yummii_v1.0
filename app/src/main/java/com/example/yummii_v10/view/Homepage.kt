@@ -1,4 +1,4 @@
-package com.example.yummii_v10.View
+package com.example.yummii_v10.view
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -46,7 +46,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.yummii_v10.R
-import com.example.yummii_v10.View.component.SliderView
+import com.example.yummii_v10.view.component.SliderView
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Homepage(title: String, navController: NavController) {

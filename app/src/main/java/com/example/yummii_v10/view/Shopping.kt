@@ -1,4 +1,4 @@
-package com.example.yummii_v10.View
+package com.example.yummii_v10.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

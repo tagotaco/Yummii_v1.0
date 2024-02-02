@@ -1,4 +1,4 @@
-package com.example.yummii_v10.View.component
+package com.example.yummii_v10.view.component
 
 import android.util.Log
 import androidx.compose.foundation.Image

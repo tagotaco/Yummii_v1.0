@@ -1,4 +1,4 @@
-package com.example.yummii_v10.View
+package com.example.yummii_v10.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.yummii_v10.View.component.RecipeCard
+import com.example.yummii_v10.view.component.RecipeCard
 import com.example.yummii_v10.ViewModel.RecipeViewModel
 
 @Composable
