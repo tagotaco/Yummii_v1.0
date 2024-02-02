@@ -83,4 +83,8 @@ dependencies {
     //Icons extension
     implementation("androidx.compose.material:material-icons-extended:1.5.4")
 
+    implementation ("androidx.compose.ui:ui:1.2.1")
+    implementation ("androidx.compose.material:material:1.2.1")
+    implementation ("androidx.compose.ui:ui-tooling-preview:1.2.1")
+
 }

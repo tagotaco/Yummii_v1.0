@@ -10,7 +10,6 @@ import com.example.yummii_v10.Model.api.api.recipeDetail.RecipeInfoViewModelInte
 import com.example.yummii_v10.Model.api.api.recipeDetail.RecipeRepository
 import kotlinx.coroutines.launch
 
-//class RecipeInfoViewModel(private val repository: RecipeRepository) : ViewModel()
 class RecipeInfoViewModel(private val repository: RecipeRepository) : ViewModel(), RecipeInfoViewModelInterface {
     private val _recipe = MutableLiveData<Recipe>()
     override val recipe: LiveData<Recipe> get() = _recipe
@@ -22,7 +21,7 @@ class RecipeInfoViewModel(private val repository: RecipeRepository) : ViewModel(
                 val result = repository.getRecipeInformation(recipeId, apiKey)
                 _recipe.value = result
             } catch (e: Exception) {
-                // Handle the exception
+
                 Log.e("RecipeInfoViewModel", "Error fetching recipe information: ${e.message}")
             }
         }

@@ -116,12 +116,12 @@ class RecipeViewModel(private val state: SavedStateHandle) : ViewModel() {
                 // Directly receive the result since it's a suspend function
                 val recipe = api.getRecipeInformation(recipeId, "767f89c0cd564a5592defdd854ea7701")
                 Log.d("RecipeViewModel", "Recipe fetched: $recipe")
-                // Update your LiveData here
-                // Assuming you have LiveData for a single recipe
                 _recipeLiveData.value = recipe
+
             } catch (e: HttpException) {
                 // Handle the case where the API response is not successful
                 Log.e("RecipeViewModel", "API Error: ${e.response()?.errorBody()?.string()}", e)
+
             } catch (e: Exception) {
                 // Handle other exceptions such as network errors, etc.
                 Log.e("RecipeViewModel", "Exception fetching recipe", e)
